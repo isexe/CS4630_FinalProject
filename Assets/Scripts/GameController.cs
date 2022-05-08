@@ -21,6 +21,7 @@ public class GameController : MonoBehaviour
     public Text timerUI;
     public GameObject lifeCounterUI; //ensure the children of this object are orders from top to bottom
     public GameObject respawnButton;
+    public GameObject pauseScreen;
 
     // stuff for stuff
     private float score;
@@ -28,6 +29,7 @@ public class GameController : MonoBehaviour
     private int lives;
     private int livesLost;
     private float playTime;
+    private bool isPaused;
 
     // set singleton
     void Awake(){
@@ -39,6 +41,7 @@ public class GameController : MonoBehaviour
     // Zero out stuff and get game ready
     void Start()
     {
+        isPaused = false;
         minScore = 0;
         score = 0;
         lives = lifeCounterUI.transform.childCount;
@@ -79,7 +82,7 @@ public class GameController : MonoBehaviour
 
         // create new player at button loc
         GameObject playerTemp = Instantiate<GameObject>(playerPrefab);
-        Vector3 spawnPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 spawnPoint = GameObject.FindGameObjectWithTag("Respawn").transform.position;
         spawnPoint.z = 0;
         playerTemp.transform.position = spawnPoint;
 
@@ -169,5 +172,17 @@ public class GameController : MonoBehaviour
         respawnButton.SetActive(true);
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    //! need to add something to prevent player from committing suicide
+    public void PauseGame(){
+        pauseScreen.SetActive(true);
+        isPaused = true;
+        Time.timeScale = 0;
+    }
+    public void ResumeGame(){
+        isPaused = false;
+        pauseScreen.SetActive(false);
+        Time.timeScale = 1;
     }
 }

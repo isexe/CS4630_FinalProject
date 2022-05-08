@@ -41,6 +41,13 @@ public class PlayerController : MonoBehaviour
         // switches based on what the player touches
         switch (obj.tag)
         {
+            // if bad temp, punish and destroy bad
+            case "Bomb":
+                GameController.S.HitEnemy();
+                IsDead();
+                Destroy(obj.gameObject);
+                break;
+
             // if bad something, punish
             case "Enemy":
                 // lets gamecontroller do heavy lifting
@@ -55,6 +62,7 @@ public class PlayerController : MonoBehaviour
                 // passes obj for calculating point value and destroying
                 GameController.S.HitBalloon(obj.gameObject);
                 break;
+
         }
     }
 
