@@ -19,17 +19,32 @@ public class GameController : MonoBehaviour
     [Header("UI Elements")]
     public Text scoreUI;
     public Text timerUI;
+    public Text levelUI;
     public GameObject lifeCounterUI; //ensure the children of this object are orders from top to bottom
     public GameObject respawnButton;
     public GameObject pauseScreen;
 
     // stuff for stuff
     private float score;
+    public float Score{
+        get{ return score;}
+        set{ score = value;}
+    }
+
     private float minScore;
     private int lives;
     private int livesLost;
     private float playTime;
-    private bool isPaused;
+    public int currentLevel;
+    private int maxLevels;
+    public float startTime;
+
+    // assume player will win
+    public bool won = true;
+    
+    public float TimeRemaining{
+        get{ return timerInSec - playTime;}
+    }
 
     // set singleton
     void Awake(){
@@ -41,15 +56,31 @@ public class GameController : MonoBehaviour
     // Zero out stuff and get game ready
     void Start()
     {
-        isPaused = false;
+        // max levels is scenes minus main and exit screens
+        maxLevels = SceneManager.sceneCountInBuildSettings-2;
+
+        // start time for logging
+        startTime = Time.time;
+
+        // set current level
+        currentLevel = 1;
+
+        // initialize scores
         minScore = 0;
-        score = 0;
+        Score = 0;
+
+        // find max lives based on UI
         lives = lifeCounterUI.transform.childCount;
         livesLost = 0;
+
+        // start playtime
         playTime = 0;
+
+        // update UI elements
         UpdateTimerUI();
         UpdateScoreUI();
         UpdateLifeCounterUI();
+        UpdateLevelUI();
     }
 
     // update timer and check for level completion
@@ -96,7 +127,8 @@ public class GameController : MonoBehaviour
         // bigger == better
         float magVal = obj.transform.localScale.magnitude;
         // change to int
-        int scoreVal = Mathf.RoundToInt(magVal);
+        int scoreVal = Mathf.CeilToInt(magVal * 10);
+        // Debug.Log("Mag: " + magVal + ", Score: " + scoreVal);
         // add to score and update UI
         IncScore(scoreVal);
         // destroy old balloon
@@ -104,24 +136,31 @@ public class GameController : MonoBehaviour
     }
 
     public void IncScore(int val){
-        score += val;
+        Score += val;
         UpdateScoreUI();
     }
 
+    // was going to use for punish but decided not to...for now >:)
     public void DecScore(int val){
-        score -= val;
+        Score -= val;
         UpdateScoreUI();
     }
 
     void UpdateScoreUI(){
-        scoreUI.text = score.ToString();
+        scoreUI.text = Score.ToString();
     }
     
     // updates timer UI
     //! currently if playTime finishes it just resets
     void UpdateTimerUI(){
-        if(playTime > timerInSec){
-            playTime = 0;
+        if(TimeRemaining <= 0){
+            // prevent negative points during calc
+            playTime = timerInSec;
+
+            // set to lost
+            won = false;
+
+            SceneManager.LoadScene(SceneManager.sceneCountInBuildSettings-1);
         }
         timerUI.text = Mathf.Floor((timerInSec-playTime)/60).ToString("0") + ":" + Mathf.Floor((timerInSec-playTime)%60).ToString("00");
     }
@@ -136,12 +175,16 @@ public class GameController : MonoBehaviour
         }
     }
 
+    void UpdateLevelUI(){
+        levelUI.text = "Level: " + currentLevel;
+    }
+
     // restarts level and updates data stuff, then UI stuff
     void RestartLevel(){
         ResetLifeCounterUI();
         livesLost = 0;
         // since they died the score is set to score from beginning of level
-        score = minScore;
+        Score = minScore;
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         UpdateScoreUI();
@@ -162,27 +205,39 @@ public class GameController : MonoBehaviour
     }
 
     // sets some data stuff then goes to next level
-    //! currently just reloads current level
+    //// currently just reloads current level
     void NextLevel(){
         ResetLifeCounterUI();
         livesLost = 0;
-        minScore = score;
+        minScore = Score;
 
         UpdateLifeCounterUI();
         respawnButton.SetActive(true);
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        currentLevel += 1;
+        if(currentLevel > maxLevels){
+            currentLevel = maxLevels;
+        }
+        UpdateLevelUI();
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     //! need to add something to prevent player from committing suicide
     public void PauseGame(){
         pauseScreen.SetActive(true);
-        isPaused = true;
         Time.timeScale = 0;
     }
     public void ResumeGame(){
-        isPaused = false;
         pauseScreen.SetActive(false);
         Time.timeScale = 1;
+    }
+
+    public void QuitGame(){
+        ResumeGame();
+        won = false;
+        playTime = timerInSec;
+        SceneManager.LoadScene(SceneManager.sceneCountInBuildSettings-1);
+        
     }
 }

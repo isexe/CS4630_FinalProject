@@ -1,0 +1,56 @@
+--- Game Data ---
+
+ID: 1348942624
+Time Played: 5/9/2022 4:37:16 AM
+Total Playtime: 10.00
+Final Score: 847
+
+ID: 1348942624
+Time Played: 5/9/2022 4:37:46 AM
+Total Playtime: 10.00
+Final Score: 752
+
+ID: 1348942624
+Time Played: 5/9/2022 4:39:27 AM
+Total Playtime: 24.32
+Final Score: 1738
+
+ID: 1348942624
+Time Played: 5/9/2022 4:42:17 AM
+Total Playtime: 1.75
+Final Score: 0
+
+ID: 1348942624
+Time Played: 5/9/2022 4:42:39 AM
+Total Playtime: 15.36
+Final Score: 485
+
+ID: 1348942624
+Time Played: 5/9/2022 4:46:25 AM
+Total Playtime: 28.50
+Final Score: 1733
+
+ID: 1348942624
+Time Played: 5/9/2022 4:46:33 AM
+Total Playtime: 1.43
+Final Score: 0
+
+ID: 1348942624
+Time Played: 5/9/2022 4:48:00 AM
+Total Playtime: 28.58
+Final Score: 1733
+
+ID: 1348942624
+Time Played: 5/9/2022 5:03:35 AM
+Total Playtime: 46.26
+Final Score: 1716
+
+ID: 1348942624
+Time Played: 5/9/2022 5:06:59 AM
+Total Playtime: 34.57
+Final Score: 1727
+
+ID: 1348942624
+Time Played: 5/9/2022 5:07:23 AM
+Total Playtime: 9.98
+Final Score: 154
