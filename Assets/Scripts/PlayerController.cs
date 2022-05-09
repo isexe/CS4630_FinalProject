@@ -69,6 +69,10 @@ public class PlayerController : MonoBehaviour
     // stops the player and prevents moving
     void IsDead(){
         alive = false;
-        player.velocity = Vector3.zero;
+        player.Sleep();
+
+        // disables collider to prevent another lose
+        player.gameObject.GetComponent<SphereCollider>().enabled = false;
+
     }
 }
