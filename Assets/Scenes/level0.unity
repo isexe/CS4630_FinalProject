@@ -2236,7 +2236,7 @@ MonoBehaviour:
   levelUI: {fileID: 1382768956}
   lifeCounterUI: {fileID: 556851202}
   respawnButton: {fileID: 1620203133}
-  pauseScreen: {fileID: 0}
+  pauseScreen: {fileID: 850878915}
   currentLevel: 0
   startTime: 0
   won: 1
